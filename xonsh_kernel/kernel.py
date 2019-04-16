@@ -43,7 +43,7 @@ class XonshKernel(MetaKernel):
 
     def do_execute_direct(self, code, silent=False):
         out, err, interrupted = self._do_execute_direct(code)
-        hist = builtins.__xonsh_history__
+        hist = builtins.__xonsh__.history
         if not silent:  # stdout response
             if out:
                 self._respond_in_chunks('stdout', out.strip())
@@ -57,8 +57,9 @@ class XonshKernel(MetaKernel):
                 return hist.outs[-1]
 
     def _do_execute_direct(self, code):
-        shell = builtins.__xonsh_shell__
-        env = builtins.__xonsh_env__
+        shell = builtins.__xonsh__.shell
+        env = builtins.__xonsh__.env
+        
         out = io.StringIO()
         err = io.StringIO()
         enc = env.get('XONSH_ENCODING')
@@ -102,7 +103,7 @@ class XonshKernel(MetaKernel):
 
     def do_complete(self, code, pos):
         """Get completions."""
-        shell = builtins.__xonsh_shell__
+        shell = builtins.__xonsh__.shell
         line = code.split('\n')[-1]
         prefix = line.split(' ')[-1]
         endidx = pos
